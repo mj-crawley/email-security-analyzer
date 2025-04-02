@@ -16,7 +16,7 @@ I developed a modular Python application that consolidates multiple security che
 
 <b>Technical Implementation:</b></br>
 The application was built using Python 3.x and incorporates:</br>
-<ul><li>API Integration: Connected to multiple security services (VirusTotal, AbuseIPDB, WhoisXML, Google Custom Search) through their REST APIs.<li>
+<ul><li>API Integration: Connected to multiple security services (VirusTotal, AbuseIPDB, WhoisXML, Google Custom Search) through their REST APIs.</li>
 <li>Modular Architecture: Designed with separate classes for each analysis type, facilitating maintenance and future expansion.</li>
 <li>Regex Pattern Matching: Implemented sophisticated pattern recognition to extract key information from email headers and WHOIS data.</li>
 <li>DNS Querying: Directly queries DNS records to validate SPF and DMARC configurations.</li>
