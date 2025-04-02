@@ -30,7 +30,7 @@ The Email Security Analyzer delivers:</br>
 <li>Detailed domain intelligence for informed security decisions</li>
 <li>Clear indicators of potential phishing or fraudulent emails</li>
 </ul>
-The tool has proven particularly valuable for rapid triage of suspicious emails and initial threat hunting, which helps prioritize response efforts more effectively.</br>
+The tool has proven particularly valuable for rapid triage of suspicious emails and initial threat hunting, which helps prioritize response efforts more effectively.</br></br>
 
 <b>Technologies Used:</b></br>
 <ul><li>Python 3.x</li>
