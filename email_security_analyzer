@@ -1,0 +1,577 @@
+#!/usr/bin/env python3
+"""
+Email Security Analyzer
+
+A comprehensive tool for email security analysis including:
+1. Header analyzer
+2. Domain check (basic)
+3. Blocklist check
+4. Authentication information
+
+Uses APIs from Bing, VirusTotal, AbuseIPDB, and WhoisXMLAPI.
+"""
+
+import re
+import json
+import argparse
+import sys
+import requests
+from email.parser import HeaderParser
+import email
+import dns.resolver
+
+# Configuration - Replace these with your actual API keys
+CONFIG = {
+    "google_api_key": "YOUR_GOOGLE_API_KEY",
+    "google_cx": "YOUR_GOOGLE_SEARCH_ENGINE_ID",
+    "virustotal_api_key": "YOUR_VIRUSTOTAL_API_KEY",
+    "abuseipdb_api_key": "YOUR_ABUSEIPDB_API_KEY",
+    "whoisxml_api_key": "YOUR_WHOISXML_API_KEY",
+
+}
+
+class HeaderAnalyzer:
+    """Analyzes email headers for security and sender information."""
+    
+    def __init__(self, config):
+        self.config = config
+        
+    def analyze(self, header_text):
+        """Main method to analyze header information."""
+        parser = HeaderParser()
+        headers = parser.parsestr(header_text)
+        
+        print("\n===== HEADER ANALYSIS =====\n")
+        
+        # Extract sender address
+        from_address = headers.get('From', '')
+        sender_email = self._extract_email(from_address)
+        print(f"Sender address: {sender_email}")
+        
+        # Extract domain from sender email
+        sender_domain = self._extract_domain(sender_email)
+        
+        # Extract return path
+        return_path = headers.get('Return-Path', '')
+        return_path_email = self._extract_email(return_path)
+        
+        if return_path_email and sender_email:
+            if return_path_email.lower() == sender_email.lower():
+                print("Return path matches From address")
+            else:
+                print("Return path is different from sender address")
+                print(f"Return-Path: {return_path_email}")
+        else:
+            print("Return-Path: info not available")
+        
+        # Check for reply-to
+        reply_to = headers.get('Reply-To', '')
+        if reply_to:
+            print(f"Reply-To: {reply_to}")
+        else:
+            print("No reply-to address")
+        
+        # Check SPF and DMARC
+        self._check_email_authentication(sender_domain)
+        
+        # Domain WHOIS information
+        if sender_domain:
+            self._get_whois_info(sender_domain)
+            self._check_social_media_presence(sender_domain)
+            self._check_web_presence(sender_domain)
+            self._check_blocklist(sender_domain)
+    
+    def _extract_email(self, address_field):
+        """Extract email address from a header field."""
+        if not address_field:
+            return ""
+        
+        matches = re.findall(r'[\w\.-]+@[\w\.-]+', address_field)
+        if matches:
+            return matches[0]
+        return ""
+    
+    def _extract_domain(self, email):
+        """Extract domain from an email address."""
+        if not email or '@' not in email:
+            return ""
+        
+        return email.split('@')[-1]
+    
+    def _check_email_authentication(self, domain):
+        """Check SPF and DMARC records for the domain."""
+        if not domain:
+            print("SPF: info not available")
+            print("DMARC: info not available")
+            return
+        
+        # Check SPF
+        try:
+            spf_records = dns.resolver.resolve(domain, 'TXT')
+            spf_found = False
+            for record in spf_records:
+                if b'v=spf1' in record.to_text().encode('utf-8'):
+                    spf_found = True
+                    print("SPF: pass")
+                    break
+            
+            if not spf_found:
+                print("SPF: fail")
+        except Exception:
+            print("SPF: fail")
+        
+        # Check DMARC
+        try:
+            dmarc_records = dns.resolver.resolve('_dmarc.' + domain, 'TXT')
+            dmarc_found = False
+            for record in dmarc_records:
+                if b'v=DMARC1' in record.to_text().encode('utf-8'):
+                    dmarc_found = True
+                    print("DMARC: pass")
+                    break
+            
+            if not dmarc_found:
+                print("DMARC: fail")
+        except Exception:
+            print("DMARC: fail")
+    
+    def _get_whois_info(self, domain):
+        """Get WHOIS information for a domain."""
+        print("\n--- Domain Information ---")
+        
+        try:
+            url = f"https://whois.whoisxmlapi.com/api/v1?apiKey={self.config['whoisxml_api_key']}&domainName={domain}"
+            response = requests.get(url)
+            
+            if response.status_code == 200:
+                whois_data = response.json()
+                registryData = whois_data.get('registryData', {})
+                
+                # Domain Information
+                created_date = registryData.get('createdDate', 'info not available')
+                expires_date = registryData.get('expiresDate', 'info not available')
+                
+                print("Domain Information:")
+                print(f"Registered On: {created_date}")
+                print(f"Expires On: {expires_date}")
+                
+                # Registrant Contact
+                registrant = registryData.get('registrant', {})
+                org = registrant.get('organization', 'info not available')
+                country = registrant.get('country', 'info not available')
+                
+                print("\nRegistrant Contact:")
+                print(f"Organization: {org}")
+                print(f"Country: {country}")
+            else:
+                print("Domain Information: info not available")
+                print("Registrant Contact: info not available")
+        except Exception as e:
+            print(f"Error retrieving WHOIS data: {e}")
+            print("Domain Information: info not available")
+            print("Registrant Contact: info not available")
+    
+    def _check_social_media_presence(self, domain):
+        """Check for the domain's presence on major social media platforms."""
+        print("\n--- Social Media Presence ---")
+        
+        # Check if Google API key and Search Engine ID are available
+        if not self.config.get('google_api_key') or not self.config.get('google_cx'):
+            print("Social media presence check skipped - Google API configuration missing")
+            print("You can manually check these platforms:")
+            print(f"- LinkedIn: https://www.linkedin.com/company/{domain}")
+            print(f"- Twitter/X: https://twitter.com/search?q={domain}")
+            print(f"- Instagram: https://www.instagram.com/{domain}")
+            print(f"- Facebook: https://www.facebook.com/search/top?q={domain}")
+            return
+            
+        try:
+            # Using Google Custom Search API for social media presence
+            social_platforms = [
+                {"name": "LinkedIn", "site": "linkedin.com"},
+                {"name": "Twitter/X", "site": "twitter.com"},
+                {"name": "Instagram", "site": "instagram.com"},
+                {"name": "Facebook", "site": "facebook.com"}
+            ]
+            
+            results = []
+            for platform in social_platforms:
+                search_term = f"site:{platform['site']} {domain}"
+                url = f"https://www.googleapis.com/customsearch/v1?key={self.config['google_api_key']}&cx={self.config['google_cx']}&q={search_term}"
+                
+                response = requests.get(url)
+                
+                if response.status_code == 200:
+                    search_results = response.json()
+                    items = search_results.get('items', [])
+                    
+                    for item in items[:2]:  # Limit to top 2 results per platform to conserve API quota
+                        results.append(f"{platform['name']}: {item['title']} - {item['link']}")
+            
+            if results:
+                for result in results:
+                    print(result)
+            else:
+                print("No social media presence found")
+        except Exception as e:
+            print(f"Error checking social media presence: {e}")
+            print("Unable to check social media presence")
+    
+    def _check_web_presence(self, domain):
+        """Check for the domain's general web presence."""
+        print("\n--- Web Presence ---")
+        
+        # Check if Google API key and Search Engine ID are available
+        if not self.config.get('google_api_key') or not self.config.get('google_cx'):
+            print("Web presence check skipped - Google API configuration missing")
+            print(f"You can manually search for this domain at: https://www.google.com/search?q={domain}")
+            return
+            
+        try:
+            url = f"https://www.googleapis.com/customsearch/v1?key={self.config['google_api_key']}&cx={self.config['google_cx']}&q={domain}"
+            response = requests.get(url)
+            
+            if response.status_code == 200:
+                search_results = response.json()
+                items = search_results.get('items', [])
+                
+                if items:
+                    for i, item in enumerate(items[:5]):  # Limit to top 5 results to conserve API quota
+                        print(f"{i+1}. {item['title']}: {item['link']}")
+                        if 'snippet' in item:
+                            print(f"   {item['snippet']}")
+                else:
+                    print("No web presence found")
+            else:
+                print(f"Unable to check web presence: {response.status_code} {response.text}")
+        except Exception as e:
+            print(f"Error checking web presence: {e}")
+            print("Unable to check web presence")
+    
+    def _check_blocklist(self, domain_or_ip):
+        """Check if a domain or IP is on any blocklists."""
+        print("\n--- Blocklist Check ---")
+        
+        blocklisted = False
+        blocklist_sources = []
+        
+        # Check with VirusTotal
+        try:
+            url = f"https://www.virustotal.com/api/v3/domains/{domain_or_ip}"
+            headers = {"x-apikey": self.config['virustotal_api_key']}
+            response = requests.get(url, headers=headers)
+            
+            if response.status_code == 200:
+                vt_data = response.json()
+                last_analysis_results = vt_data.get('data', {}).get('attributes', {}).get('last_analysis_results', {})
+                
+                for vendor, result in last_analysis_results.items():
+                    if result.get('category') == 'malicious':
+                        blocklisted = True
+                        blocklist_sources.append(vendor)
+        except Exception as e:
+            print(f"Error checking VirusTotal: {e}")
+        
+        # Check with AbuseIPDB if it looks like an IP
+        if re.match(r'^(\d{1,3}\.){3}\d{1,3}$', domain_or_ip):
+            try:
+                url = f"https://api.abuseipdb.com/api/v2/check"
+                headers = {"Key": self.config['abuseipdb_api_key'], "Accept": "application/json"}
+                params = {"ipAddress": domain_or_ip}
+                response = requests.get(url, headers=headers, params=params)
+                
+                if response.status_code == 200:
+                    abuse_data = response.json()
+                    if abuse_data.get('data', {}).get('abuseConfidenceScore', 0) > 20:
+                        blocklisted = True
+                        blocklist_sources.append("AbuseIPDB")
+            except Exception as e:
+                print(f"Error checking AbuseIPDB: {e}")
+        
+        print(f"Blocklisted: {blocklisted}")
+        if blocklisted and blocklist_sources:
+            print("Blocklisted by:")
+            for source in blocklist_sources:
+                print(f"- {source}")
+
+
+class DomainChecker:
+    """Performs basic domain checks."""
+    
+    def __init__(self, config):
+        self.config = config
+    
+    def check(self, domain):
+        """Check basic domain information."""
+        print("\n===== DOMAIN CHECK =====\n")
+        
+        try:
+            url = f"https://whois.whoisxmlapi.com/api/v1?apiKey={self.config['whoisxml_api_key']}&domainName={domain}"
+            response = requests.get(url)
+            
+            if response.status_code == 200:
+                whois_data = response.json()
+                registryData = whois_data.get('registryData', {})
+                
+                # Domain Information
+                created_date = registryData.get('createdDate', 'info not available')
+                expires_date = registryData.get('expiresDate', 'info not available')
+                
+                print("Domain Information:")
+                print(f"Registered On: {created_date}")
+                print(f"Expires On: {expires_date}")
+                
+                # Registrant Contact
+                registrant = registryData.get('registrant', {})
+                org = registrant.get('organization', 'info not available')
+                country = registrant.get('country', 'info not available')
+                
+                print("\nRegistrant Contact:")
+                print(f"Organization: {org}")
+                print(f"Country: {country}")
+            else:
+                print("Domain Information: info not available")
+                print("Registrant Contact: info not available")
+        except Exception as e:
+            print(f"Error retrieving WHOIS data: {e}")
+            print("Domain Information: info not available")
+            print("Registrant Contact: info not available")
+
+
+class BlocklistChecker:
+    """Checks domains or IPs against security blocklists."""
+    
+    def __init__(self, config):
+        self.config = config
+    
+    def check(self, domain_or_ip):
+        """Check if a domain or IP is on any blocklists."""
+        print("\n===== BLOCKLIST CHECK =====\n")
+        
+        blocklisted = False
+        blocklist_sources = []
+        
+        # Check with VirusTotal
+        try:
+            # Determine if it's a domain or IP
+            if re.match(r'^(\d{1,3}\.){3}\d{1,3}$', domain_or_ip):
+                url = f"https://www.virustotal.com/api/v3/ip_addresses/{domain_or_ip}"
+            else:
+                url = f"https://www.virustotal.com/api/v3/domains/{domain_or_ip}"
+                
+            headers = {"x-apikey": self.config['virustotal_api_key']}
+            response = requests.get(url, headers=headers)
+            
+            if response.status_code == 200:
+                vt_data = response.json()
+                last_analysis_results = vt_data.get('data', {}).get('attributes', {}).get('last_analysis_results', {})
+                
+                for vendor, result in last_analysis_results.items():
+                    if result.get('category') == 'malicious':
+                        blocklisted = True
+                        blocklist_sources.append(vendor)
+        except Exception as e:
+            print(f"Error checking VirusTotal: {e}")
+        
+        # Check with AbuseIPDB if it looks like an IP
+        if re.match(r'^(\d{1,3}\.){3}\d{1,3}$', domain_or_ip):
+            try:
+                url = f"https://api.abuseipdb.com/api/v2/check"
+                headers = {"Key": self.config['abuseipdb_api_key'], "Accept": "application/json"}
+                params = {"ipAddress": domain_or_ip}
+                response = requests.get(url, headers=headers, params=params)
+                
+                if response.status_code == 200:
+                    abuse_data = response.json()
+                    if abuse_data.get('data', {}).get('abuseConfidenceScore', 0) > 20:
+                        blocklisted = True
+                        blocklist_sources.append("AbuseIPDB")
+            except Exception as e:
+                print(f"Error checking AbuseIPDB: {e}")
+        
+        print(f"Blocklisted: {blocklisted}")
+        if blocklisted and blocklist_sources:
+            print("Blocklisted by:")
+            for source in blocklist_sources:
+                print(f"- {source}")
+
+
+class AuthChecker:
+    """Checks email authentication information."""
+    
+    def check(self, domain):
+        """Check SPF and DMARC for a domain."""
+        print("\n===== AUTHENTICATION CHECK =====\n")
+        
+        if not domain:
+            print("SPF: info not available")
+            print("DMARC: info not available")
+            return
+        
+        # Check SPF
+        try:
+            spf_records = dns.resolver.resolve(domain, 'TXT')
+            spf_found = False
+            for record in spf_records:
+                if b'v=spf1' in record.to_text().encode('utf-8'):
+                    spf_found = True
+                    print("SPF: pass")
+                    break
+            
+            if not spf_found:
+                print("SPF: fail")
+        except Exception:
+            print("SPF: fail")
+        
+        # Check DMARC
+        try:
+            dmarc_records = dns.resolver.resolve('_dmarc.' + domain, 'TXT')
+            dmarc_found = False
+            for record in dmarc_records:
+                if b'v=DMARC1' in record.to_text().encode('utf-8'):
+                    dmarc_found = True
+                    print("DMARC: pass")
+                    break
+            
+            if not dmarc_found:
+                print("DMARC: fail")
+        except Exception:
+            print("DMARC: fail")
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Email Security Analysis Tool')
+    parser.add_argument('--mode', type=str, choices=['header', 'domain', 'blocklist', 'auth'], 
+                      help='Mode of operation: header, domain, blocklist, or auth')
+    
+    args = parser.parse_args()
+    
+    # If no mode provided, show menu
+    if not args.mode:
+        while True:
+            print("\nEMAIL SECURITY ANALYSIS TOOL")
+            print("1. Header analyzer")
+            print("2. Domain check (basic)")
+            print("3. Blocklist check")
+            print("4. Authentication information")
+            print("5. Exit")
+            
+            choice = input("\nEnter your choice (1-5): ")
+            
+            if choice == '1':
+                print("\nEnter header info:")
+                lines = []
+                while True:
+                    line = input()
+                    if not line:
+                        break
+                    lines.append(line)
+                
+                if lines:
+                    header_text = '\n'.join(lines)
+                    analyzer = HeaderAnalyzer(CONFIG)
+                    analyzer.analyze(header_text)
+                else:
+                    print("No headers provided.")
+                    
+            elif choice == '2':
+                domain = input("\nEnter domain name: ")
+                if domain:
+                    checker = DomainChecker(CONFIG)
+                    checker.check(domain)
+                else:
+                    print("No domain provided.")
+                    
+            elif choice == '3':
+                domain_or_ip = input("\nEnter domain name or IP address: ")
+                if domain_or_ip:
+                    checker = BlocklistChecker(CONFIG)
+                    checker.check(domain_or_ip)
+                else:
+                    print("No domain or IP provided.")
+                    
+            elif choice == '4':
+                print("\nEnter header info:")
+                lines = []
+                while True:
+                    line = input()
+                    if not line:
+                        break
+                    lines.append(line)
+                
+                if lines:
+                    header_text = '\n'.join(lines)
+                    from_match = re.search(r'From:.*?[\w\.-]+@([\w\.-]+)', header_text, re.IGNORECASE)
+                    if from_match:
+                        domain = from_match.group(1)
+                        checker = AuthChecker()
+                        checker.check(domain)
+                    else:
+                        print("Could not extract domain from headers.")
+                else:
+                    print("No headers provided.")
+                    
+            elif choice == '5':
+                print("Exiting...")
+                sys.exit(0)
+                
+            else:
+                print("Invalid choice. Please try again.")
+    else:
+        # Direct mode operation
+        if args.mode == 'header':
+            print("\nEnter header info:")
+            lines = []
+            while True:
+                line = input()
+                if not line:
+                    break
+                lines.append(line)
+            
+            if lines:
+                header_text = '\n'.join(lines)
+                analyzer = HeaderAnalyzer(CONFIG)
+                analyzer.analyze(header_text)
+            else:
+                print("No headers provided.")
+                
+        elif args.mode == 'domain':
+            domain = input("\nEnter domain name: ")
+            if domain:
+                checker = DomainChecker(CONFIG)
+                checker.check(domain)
+            else:
+                print("No domain provided.")
+                
+        elif args.mode == 'blocklist':
+            domain_or_ip = input("\nEnter domain name or IP address: ")
+            if domain_or_ip:
+                checker = BlocklistChecker(CONFIG)
+                checker.check(domain_or_ip)
+            else:
+                print("No domain or IP provided.")
+                
+        elif args.mode == 'auth':
+            print("\nEnter header info:")
+            lines = []
+            while True:
+                line = input()
+                if not line:
+                    break
+                lines.append(line)
+            
+            if lines:
+                header_text = '\n'.join(lines)
+                from_match = re.search(r'From:.*?[\w\.-]+@([\w\.-]+)', header_text, re.IGNORECASE)
+                if from_match:
+                    domain = from_match.group(1)
+                    checker = AuthChecker()
+                    checker.check(domain)
+                else:
+                    print("Could not extract domain from headers.")
+            else:
+                print("No headers provided.")
+
+
+if __name__ == "__main__":
+    main()
