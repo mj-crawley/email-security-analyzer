@@ -16,7 +16,7 @@ Visit Google Cloud Console
 Create a new project
 Enable "Custom Search JSON API"
 Create API credentials
-Also create a search engine at Programmable Search Engine and note the Search Engine ID (cx)
+Also create a search engine at Programmable Search Engine and note the Search Engine ID (cx) 
 VirusTotal API
 Register at VirusTotal
 Find your API key in your account settings
