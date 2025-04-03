@@ -33,7 +33,7 @@ Download the email_security_analyzer.py file from the attached code
 Open the file in a text editor
 Locate the CONFIG section near the top of the file
 Replace the placeholder values with your actual API keys:</br>
-python</br>
+python</br></br>
 CONFIG = {</br>
     "google_api_key": "YOUR_GOOGLE_API_KEY",</br>
     "google_cx": "YOUR_GOOGLE_SEARCH_ENGINE_ID",</br>
