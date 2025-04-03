@@ -59,11 +59,11 @@ python email_security_analyzer.py
 </ul>
 
 <h3>Blocklist Check</h3>
-Checks if a domain or IP address is on security blocklists</br>
-Reports security vendors that have flagged the entity</br>                                           
-Authentication Check</br>
-Verifies SPF and DMARC records for a domain</br>
-Determines if proper email authentication is in place</br></br>
+<li>Checks if a domain or IP address is on security blocklists</li>
+<li>Reports security vendors that have flagged the entity</li>                                      
+<li>Authentication Check</li>
+<li>Verifies SPF and DMARC records for a domain</li>
+<li>Determines if proper email authentication is in place</li>
 
 <p>
 <b>Example Usage</b></br>
@@ -75,12 +75,11 @@ Review the comprehensive analysis results</br>
 </p>
 
 <h3>Checking a Domain</h3>
-Select option 2</br>
-Enter the domain name (e.g., "example.com")</br>
-Review the domain registration information</br>
+<li>Select option 2</br>
+<li>Enter the domain name (e.g., "google.com")</li>
+<li>Review the domain registration information</li>
 
 <h2>Notes</h2>
 Google's API has a limit of 100 free searches per day</br>
 The WhoisXML API free tier has limited queries per month</br>
-For optimal results, use complete email headers</br>
-This Email Security Analyzer tool provides rapid security assessment of email communications, helping identify potential phishing attempts and validate sender authenticity through multiple security checks.
+For best results, use complete email headers</br>
