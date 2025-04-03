@@ -64,7 +64,7 @@ The tool offers four main functions:
 <li>Verifies SPF and DMARC records for a domain
 <li>Determines if proper email authentication is in place
 
-<h3>Example Usage<h3>
+<h3>Example Usage</h3>
 Analyzing Email Headers </br>
 Select option 1 from the menu </br>
 Paste the complete email headers when prompted</br>
