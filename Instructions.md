@@ -58,11 +58,12 @@ The tool offers four main functions:
 <li>Shows registration dates, owner details, and name servers
 
 <h2>Blocklist Check</h2>
-<li>Checks if a domain or IP address is on security blocklists
+<ul><li>Checks if a domain or IP address is on security blocklists
 <li>Reports security vendors that have flagged the entity
 <li>Authentication Check
 <li>Verifies SPF and DMARC records for a domain
 <li>Determines if proper email authentication is in place
+</ul>
 
 <h3>Example Usage</h3>
 Analyzing Email Headers </br>
