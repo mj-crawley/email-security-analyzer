@@ -49,21 +49,21 @@ python email_security_analyzer.py
 
 <h2>Using the Email Security Analyzer</h2>
 The tool offers four main functions:</br></br>
-<li>Header Analyzer</li>
-<li>Analyzes email headers for sender validation, SPF/DMARC checks</li>
-<li>Extracts domain information and checks against blocklists</li>
-<li>Identifies web and social media presence</li>
-<li>Domain Check</li>
-<li>Verifies domain registration information</li>
-<li>Shows registration dates, owner details, and name servers</li>
+<b>Header Analyzer</b></br>
+Analyzes email headers for sender validation, SPF/DMARC checks</br>
+Extracts domain information and checks against blocklists</br>
+Identifies web and social media presence</br>
+Domain Check</br>
+Verifies domain registration information</br>
+Shows registration dates, owner details, and name servers</br>
 
 
 <h2>Blocklist Check</h2>
-<li>Checks if a domain or IP address is on security blocklists </li>
-<li>Reports security vendors that have flagged the entity</li>
-<li>Authentication Check</li>
-<li>Verifies SPF and DMARC records for a domain</li>
-<li>Determines if proper email authentication is in place</li>
+Checks if a domain or IP address is on security blocklists</br>
+Reports security vendors that have flagged the entity</br>                                           
+Authentication Check</br>
+Verifies SPF and DMARC records for a domain</br>
+Determines if proper email authentication is in place</br>
 
 
 <h3>Example Usage</h3>
