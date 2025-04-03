@@ -10,23 +10,12 @@ Open a command prompt or terminal and run:
 pip install requests dnspython
 
 <h2>Step 2: Obtain Required API Keys</h2>
-The tool requires the following API keys:
-Google Custom Search API
-Visit Google Cloud Console
-Create a new project
-Enable "Custom Search JSON API"
-Create API credentials
-Also create a search engine at Programmable Search Engine and note the Search Engine ID (cx) 
-VirusTotal API
-Register at VirusTotal
-Find your API key in your account settings
-AbuseIPDB API
-Create an account at AbuseIPDB
-Generate an API key in your account dashboard
-WhoisXML API
-Register at WhoisXML API
-Get your API key from your account dashboard
-
+<h3>The tool requires the following API keys:</h3>
+<ul><li>Google Custom Search API</li>
+<li>VirusTotal API</li>
+<li>AbuseIPDB API</li>
+<li>WhoisXML API</li>
+</ul>
 
 <h2>Step 3: Download and Configure the Tool</h2>
 Download the email_security_analyzer.py file from the attached code
