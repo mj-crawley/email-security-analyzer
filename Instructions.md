@@ -10,7 +10,7 @@ Open a command prompt or terminal and run:
 pip install requests dnspython
 
 <h2>Step 2: Obtain Required API Keys</h2>
-<ul>The tool requires the following API keys:
+The tool requires the following API keys:
 Google Custom Search API
 Visit Google Cloud Console
 Create a new project
@@ -26,7 +26,7 @@ Generate an API key in your account dashboard
 WhoisXML API
 Register at WhoisXML API
 Get your API key from your account dashboard
-</ul>
+
 
 <h2>Step 3: Download and Configure the Tool</h2>
 Download the email_security_analyzer.py file from the attached code
@@ -48,15 +48,15 @@ python email_security_analyzer.py
 
 
 <h2>Using the Email Security Analyzer</h2>
-The tool offers four main functions:
-<ul>Header Analyzer
+The tool offers four main functions:</br>
+Header Analyzer
 <li>Analyzes email headers for sender validation, SPF/DMARC checks</li>
 <li>Extracts domain information and checks against blocklists</li>
 <li>Identifies web and social media presence</li>
 <li>Domain Check</li>
 <li>Verifies domain registration information</li>
 <li>Shows registration dates, owner details, and name servers</li>
-</ul>
+
 
 <h2>Blocklist Check</h2>
 <li>Checks if a domain or IP address is on security blocklists </li>
