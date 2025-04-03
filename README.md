@@ -48,7 +48,7 @@ Potential future improvements include:
 <ul><li>Email attachment analysis capabilities
 <li>URL scanning and reputation checking
 <li>Web-based interface option
-</li>
+</li></ul>
 
 This project demonstrates my ability to create practical security tools that combine multiple data sources, implement complex pattern analysis, and deliver actionable security intelligence through clean, maintainable code.
 
