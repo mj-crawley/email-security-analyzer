@@ -57,7 +57,7 @@ The tool offers four main functions:
 <li>Verifies domain registration information
 <li>Shows registration dates, owner details, and name servers
 
-<h2>Blocklist Check<h2>
+<h2>Blocklist Check</h2>
 <li>Checks if a domain or IP address is on security blocklists
 <li>Reports security vendors that have flagged the entity
 <li>Authentication Check
