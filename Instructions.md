@@ -32,14 +32,14 @@ Get your API key from your account dashboard
 Download the email_security_analyzer.py file from the attached code
 Open the file in a text editor
 Locate the CONFIG section near the top of the file
-Replace the placeholder values with your actual API keys:</br>
+Replace the placeholder values with your actual API keys:</br></br>
 CONFIG = {</br>
     "google_api_key": "YOUR_GOOGLE_API_KEY",</br>
     "google_cx": "YOUR_GOOGLE_SEARCH_ENGINE_ID",</br>
     "virustotal_api_key": "YOUR_VIRUSTOTAL_API_KEY",</br>
     "abuseipdb_api_key": "YOUR_ABUSEIPDB_API_KEY",</br>
     "whoisxml_api_key": "YOUR_WHOISXML_API_KEY",</br>
-}</br>
+}
 
 <h2>Step 4: Run the Tool</h2>
 Open a command prompt or terminal
