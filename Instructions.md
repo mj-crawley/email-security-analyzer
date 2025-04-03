@@ -67,7 +67,7 @@ Determines if proper email authentication is in place</br></br>
 
 <p>
 <b>Example Usage</b></br>
-Analyzing Email Headers </br>
+<u>Analyzing Email Headers</u> </br>
 Select option 1 from the menu </br>
 Paste the complete email headers when prompted</br>
 Press Enter twice (blank line) to finish input</br>
