@@ -2,7 +2,7 @@
 """
 Email Security Analyzer
 
-A comprehensive tool for email security analysis including:
+A tool for email security analysis including:
 1. Header analyzer
 2. Domain check (basic)
 3. Blocklist check
