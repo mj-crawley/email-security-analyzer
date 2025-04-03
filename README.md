@@ -1,10 +1,10 @@
 # email-security-analyzer
 
 <b>Project Overview:</b></br>
-The Email Security Analyzer is a Python-based tool designed to evaluate email security, verify domain authenticity, and detect potential phishing threats. This command-line application integrates with multiple security APIs to provide a robust analysis of email headers, domain information, and security posture.
+The Email Security Analyzer is a Python-based tool designed to evaluate email legitmacy by verifying domain authenticity, web and social media presence, gathering domain registration information, etc. This command-line application integrates with multiple security APIs to provide a detailed analysis using email headers, domain name, and IP addresses.
 
 <b>Problem Statement:</b></br>
-Email remains one of the primary attack vectors for phishing, business email compromise, and malware distribution. Security analysts and IT professionals need efficient tools to quickly assess email legitimacy and identify suspicious indicators. Existing commercial solutions are often expensive or lack comprehensive analysis in a single tool.
+Email remains one of the primary attack vectors for phishing, business email compromise, and malware distribution. IT professionals need efficient tools to quickly assess email legitimacy and identify suspicious indicators. Existing commercial solutions are often expensive or lack comprehensive analysis in a single tool.
 
 <b>Solution:</b></br>
 I developed a modular Python application that consolidates multiple security checks into a single, easy-to-use interface. The tool offers four primary functions:</br>
@@ -17,17 +17,17 @@ I developed a modular Python application that consolidates multiple security che
 <b>Technical Implementation:</b></br>
 The application was built using Python 3.x and incorporates:</br>
 <ul><li>API Integration: Connected to multiple security services (VirusTotal, AbuseIPDB, WhoisXML, Google Custom Search) through their REST APIs.</li>
-<li>Modular Architecture: Designed with separate classes for each analysis type, facilitating maintenance and future expansion.</li>
-<li>Regex Pattern Matching: Implemented sophisticated pattern recognition to extract key information from email headers and WHOIS data.</li>
+<li>Modular Architecture: Designed with separate classes for each analysis type for easier maintenance and future changes.</li>
+<li>Regex Pattern Matching: Implemented pattern recognition to extract key information from email headers and WHOIS data.</li>
 <li>DNS Querying: Directly queries DNS records to validate SPF and DMARC configurations.</li>
-<li>Command-Line Interface: Created an intuitive menu-driven interface with both interactive and direct command modes.</li>
+<li>Command-Line Interface: Created a menu-driven interface with direct command modes.</li>
 </ul>
   
 <b>Results:</b></br>
 The Email Security Analyzer delivers:</br>
-<ul><li>Full security assessments in seconds rather than minutes of manual checking
+<ul><li>Full security assessments in seconds rather than minutes of manual checking</li>
 <li>Integration of multiple security data sources in a single tool</li>
-<li>Detailed domain intelligence for informed security decisions</li>
+<li>Domain information for making more informed security decisions quicker</li>
 <li>Clear indicators of potential phishing or fraudulent emails</li>
 </ul>
 
