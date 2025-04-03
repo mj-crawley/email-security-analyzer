@@ -47,16 +47,16 @@ Navigate to the directory containing the script:
 python email_security_analyzer.py
 
 
-<h2>Using the Email Security Analyzer</h2>
-The tool offers four main functions:
-<li>Header Analyzer</li>
-<li>Analyzes email headers for sender validation, SPF/DMARC checks</li>
+<h2>Using the Email Security Analyzer</h2> The tool offers four main functions
+
+<h2>Header Analyzer:</h2>h2>
+<ul><li>Analyzes email headers for sender validation, SPF/DMARC checks</li>
 <li>Extracts domain information and checks against blocklists</li>
 <li>Identifies web and social media presence</li>
 <li>Domain Check</li>
 <li>Verifies domain registration information</li>
 <li>Shows registration dates, owner details, and name servers</li>
-
+</ul>
 
 <h2>Blocklist Check</h2>
 Checks if a domain or IP address is on security blocklists</br>
