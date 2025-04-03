@@ -63,15 +63,16 @@ Checks if a domain or IP address is on security blocklists</br>
 Reports security vendors that have flagged the entity</br>                                           
 Authentication Check</br>
 Verifies SPF and DMARC records for a domain</br>
-Determines if proper email authentication is in place</br>
+Determines if proper email authentication is in place</br></br>
 
-
-Example Usage</br>
+<p>
+<b>Example Usage</b></br>
 Analyzing Email Headers </br>
 Select option 1 from the menu </br>
 Paste the complete email headers when prompted</br>
 Press Enter twice (blank line) to finish input</br>
 Review the comprehensive analysis results</br>
+</p>
 
 <h3>Checking a Domain</h3>
 Select option 2</br>
