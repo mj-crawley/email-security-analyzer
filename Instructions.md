@@ -47,8 +47,8 @@ Navigate to the directory containing the script:
 python email_security_analyzer.py
 
 
-<h2>Using the Email Security Analyzer</h2></br>
-The tool offers four main functions:</br>
+<h2>Using the Email Security Analyzer</h2>
+The tool offers four main functions:</br></br>
 Header Analyzer</br>
 <li>Analyzes email headers for sender validation, SPF/DMARC checks</li>
 <li>Extracts domain information and checks against blocklists</li>
