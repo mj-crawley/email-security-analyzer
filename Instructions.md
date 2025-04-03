@@ -59,11 +59,13 @@ python email_security_analyzer.py
 </ul>
 
 <h3>Blocklist Check</h3>
-<li>Checks if a domain or IP address is on security blocklists</li>
+<ul><li>Checks if a domain or IP address is on security blocklists</li>
 <li>Reports security vendors that have flagged the entity</li>                                      
 <li>Authentication Check</li>
 <li>Verifies SPF and DMARC records for a domain</li>
 <li>Determines if proper email authentication is in place</li>
+</ul>
+</br>
 
 <p>
 <b>Example Usage</b></br>
@@ -75,9 +77,10 @@ Review the comprehensive analysis results</br>
 </p>
 
 <h3>Checking a Domain</h3>
-<li>Select option 2</br>
+<ul><li>Select option 2</br>
 <li>Enter the domain name (e.g., "google.com")</li>
 <li>Review the domain registration information</li>
+</ul>
 
 <h2>Notes</h2>
 Google's API has a limit of 100 free searches per day</br>
