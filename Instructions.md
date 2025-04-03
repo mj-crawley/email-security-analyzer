@@ -26,6 +26,7 @@ Generate an API key in your account dashboard
 WhoisXML API
 Register at WhoisXML API
 Get your API key from your account dashboard
+</ul>
 
 <h2>Step 3: Download and Configure the Tool</h2>
 <p>Download the email_security_analyzer.py file from the attached code</br>
