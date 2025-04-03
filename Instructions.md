@@ -29,10 +29,10 @@ Get your API key from your account dashboard
 </ul>
 
 <h2>Step 3: Download and Configure the Tool</h2>
-<p>Download the email_security_analyzer.py file from the attached code</br>
-Open the file in a text editor</br>
-Locate the CONFIG section near the top of the file</br>
-Replace the placeholder values with your actual API keys:</br>
+Download the email_security_analyzer.py file from the attached code
+Open the file in a text editor
+Locate the CONFIG section near the top of the file
+Replace the placeholder values with your actual API keys:
 python
 CONFIG = {
     "google_api_key": "YOUR_GOOGLE_API_KEY",
